@@ -42,13 +42,13 @@ LOGO_PATH = 'resources/userge.png'
 async def rename_(message: Message):
     """ rename telegram files """
     if not message.filtered_input_str:
-        await message.err("new name not found!")
+        await message.err("<b>Please Atleast Give Me New Name!</b>")
         return
-    await message.edit("`Trying to Rename ...`")
+    await message.edit("▣ <b>Trying to Rename</b> ")
     if message.reply_to_message and message.reply_to_message.media:
         await _handle_message(message)
     else:
-        await message.edit("Please read `.help rename`", del_in=5)
+        await message.edit("Please read `/help rename`")
 
 
 @userge.on_cmd("convert", about={
@@ -56,12 +56,12 @@ async def rename_(message: Message):
     'usage': "reply {tr}convert to any media"}, del_pre=True, check_downpath=True)
 async def convert_(message: Message):
     """ convert telegram files """
-    await message.edit("`Trying to Convert ...`")
+    await message.edit("<b> Trying to Convert </b>")
     if message.reply_to_message and message.reply_to_message.media:
         message.text = '' if message.reply_to_message.document else ". -d"
         await _handle_message(message)
     else:
-        await message.edit("Please read `.help convert`", del_in=5)
+        await message.edit("Please read `/help convert`")
 
 
 @userge.on_cmd("upload", about={
@@ -77,7 +77,7 @@ async def upload_to_tg(message: Message):
     """ upload to telegram """
     path_ = message.filtered_input_str
     if not path_:
-        await message.edit("invalid input!, check `.help .upload`", del_in=5)
+        await message.edit("invalid input!, check `/help .upload`")
         return
     is_url = re.search(r"(?:https?|ftp)://[^|\s]+\.[^|\s]+", path_)
     del_path = False
@@ -86,7 +86,7 @@ async def upload_to_tg(message: Message):
         try:
             path_, _ = await url_download(message, path_)
         except ProcessCanceled:
-            await message.edit("`Process Canceled!`", del_in=5)
+            await message.edit("<b> Process Canceled! </b>", del_in=5)
             return
         except Exception as e_e:  # pylint: disable=broad-except
             await message.err(str(e_e))
@@ -111,7 +111,7 @@ async def _handle_message(message: Message) -> None:
     try:
         dl_loc, _ = await tg_download(message, message.reply_to_message)
     except ProcessCanceled:
-        await message.edit("`Process Canceled!`", del_in=5)
+        await message.edit("<b> Process Canceled! </b>", del_in=5)
     except Exception as e_e:  # pylint: disable=broad-except
         await message.err(str(e_e))
     else:
@@ -166,7 +166,7 @@ async def doc_upload(message: Message, path, del_path: bool = False,
                      extra: str = '', with_thumb: bool = True):
     str_path = str(path)
     sent: Message = await message.client.send_message(
-        message.chat.id, f"`Uploading {str_path} as a doc ... {extra}`")
+        message.chat.id, f"Uploading {str_path} as a doc ... {extra}")
     start_t = datetime.now()
     thumb = None
     if with_thumb:
@@ -206,7 +206,7 @@ async def vid_upload(message: Message, path, del_path: bool = False,
     if metadata and metadata.has("duration"):
         duration = metadata.get("duration").seconds
     sent: Message = await message.client.send_message(
-        message.chat.id, f"`Uploading {str_path} as a video ... {extra}`")
+        message.chat.id, f"Uploading {str_path} as a video ... {extra}")
     start_t = datetime.now()
     await message.client.send_chat_action(message.chat.id, "upload_video")
     width = 0
@@ -373,4 +373,4 @@ async def finalize(message: Message, msg: Message, start_t):
     else:
         end_t = datetime.now()
         m_s = (end_t - start_t).seconds
-        await message.edit(f"Uploaded in {m_s} seconds", del_in=10)
+        await message.edit(f"Uploaded in {m_s} seconds")
