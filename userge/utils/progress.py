@@ -50,7 +50,7 @@ async def progress(current: int,
         speed = current / elapsed_time
         time_to_completion = time_formatter(int((total - current) / speed))
         progress_str = \
-            "○ __{}__ : `{}`\n" + \
+            "○ **{}** : **{}**\n" + \
             "**[{}{}]**\n" + \
             "**○ Progress** : **{}%**\n" + \
             "**○ Completed** : **{}**\n" + \
