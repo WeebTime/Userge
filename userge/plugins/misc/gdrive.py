@@ -391,7 +391,6 @@ class _GDrive:
         if not os.path.exists(path):
             os.mkdir(path)
         _LOG.info("Created Folder => Name: %s", folder_name)
-        self._completed += 1
         return path
 
     def _download_dir(self, path: str, **kwargs) -> None:
